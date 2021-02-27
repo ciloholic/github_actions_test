@@ -7,22 +7,23 @@ on:
       - develop
 
 jobs:
-  deploy:
+  release-check:
     runs-on: ubuntu-latest
+    outputs:
+      label: ${{ steps.release-check.outputs.label }}
+    steps:
+    - id: release-check
+      name: Check release label
+      run: |
+        LABEL=$(jq '[.pull_request.labels[].name][] | select(contains("release"))' $GITHUB_EVENT_PATH)
+        echo $LABEL
+        echo "::set-output name=label::$LABEL"
+
+  deploy:
+    needs: release-check
+    runs-on: ubuntu-latest
+    if: true && needs.release-check.outputs.label == 'release'
 
     steps:
-    - name: Check release label
-      run: |
-        echo start
-        echo $GITHUB_EVENT_PATH
-        cat $GITHUB_EVENT_PATH
-        EXISTS_LABEL=$(jq '[.pull_request.labels[].name] | index("release")' $GITHUB_EVENT_PATH)
-        echo $EXISTS_LABEL
-        if [ "$EXISTS_LABEL" == "null" ]; then exit 0; fi
-        EXISTS_LABEL=$(jq '[.pull_request.labels[].name] | index("release1")' $GITHUB_EVENT_PATH)
-        echo $EXISTS_LABEL
-        echo end
-
-    - name: Next step
-      run: |
-        echo 'Next step'
+    - name: Release
+      run: echo 'Release'
