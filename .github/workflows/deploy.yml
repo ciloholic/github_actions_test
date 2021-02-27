@@ -1,0 +1,28 @@
+name: Deploy
+
+on:
+  pull_request:
+    branches:
+      - master
+      - develop
+    types:
+      - closed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+
+    steps:
+    - name: Check release label
+      run: |
+        echo start
+        echo $GITHUB_EVENT_PATH
+        EXISTS_LABEL=$(jq '[.pull_request.labels[].name] | index("release")' $GITHUB_EVENT_PATH)
+        echo $EXISTS_LABEL
+        if [ "$EXISTS_LABEL" == "null" ]; then exit 0; fi
+        echo end
+
+    - name: Next step
+      run: |
+        echo 'Next step'
