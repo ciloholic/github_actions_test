@@ -15,9 +15,12 @@ jobs:
       run: |
         echo start
         echo $GITHUB_EVENT_PATH
+        cat $GITHUB_EVENT_PATH
         EXISTS_LABEL=$(jq '[.pull_request.labels[].name] | index("release")' $GITHUB_EVENT_PATH)
         echo $EXISTS_LABEL
         if [ "$EXISTS_LABEL" == "null" ]; then exit 0; fi
+        EXISTS_LABEL=$(jq '[.pull_request.labels[].name] | index("release1")' $GITHUB_EVENT_PATH)
+        echo $EXISTS_LABEL
         echo end
 
     - name: Next step
