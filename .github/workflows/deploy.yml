@@ -4,7 +4,6 @@ on:
   pull_request:
     branches:
       - master
-      - develop
 
 jobs:
   release-check:
@@ -22,8 +21,8 @@ jobs:
   deploy:
     needs: release-check
     runs-on: ubuntu-latest
-    if: true && needs.release-check.outputs.label == 'release'
+    if: true && contains(needs.release-check.outputs.label, 'release')
 
     steps:
     - name: Release
-      run: echo 'Release'
+      run: echo release
