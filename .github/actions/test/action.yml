@@ -1,0 +1,10 @@
+name: test
+
+runs:
+  using: composite
+  steps:
+    - name: check2
+      shell: bash
+      run: |
+        pwd
+        ls -l
