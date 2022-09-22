@@ -1,10 +1,21 @@
 name: test
 
+inputs:
+  docker-tags:
+    required: true
+
 runs:
   using: composite
+
   steps:
-    - name: check2
+    - name: set environment variables
       shell: bash
       run: |
-        pwd
-        ls -l
+        echo 'DOCKER_TAGS<<EOF' >> $GITHUB_ENV
+        echo '${{ inputs.docker-tags }}' | tr ',' '\n' >> $GITHUB_ENV
+        echo 'EOF' >> $GITHUB_ENV
+
+    - name: check
+      shell: bash
+      run: |
+        echo ${{ env.DOCKER_TAGS }}

@@ -10,17 +10,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    defaults:
-      run:
-        working-directory: work
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: check1
-        shell: bash
-        run: |
-          pwd
-          ls -l
-
       - uses: ./.github/actions/test
+        with:
+          docker-tags: xxxxx/yyyyyy/zzzzzz-zzzz:release,xxxxx/yyyyyy/zzzzzz-zzzz:1.1.1-${{ github.sha }}
