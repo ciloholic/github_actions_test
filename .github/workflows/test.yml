@@ -1,19 +1,20 @@
-name: working directory test
+name: test
 
 permissions:
   contents: read
 
-on:
+on: 
   push:
+  pull_request:
 
 jobs:
-  test:
+  echo:
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: ./.github/actions/test
-        with:
-          docker-tags: xxxxx/yyyyyy/zzzzzz-zzzz:release,xxxxx/yyyyyy/zzzzzz-zzzz:1.1.1-${{ github.sha }}
+    steps: 
+      - run: |
+          echo '1' ${{ github.workflow }}
+          echo '2' ${{ github.ref }}
+          echo '3' ${{ github.head_ref }}
+          echo '4' ${{ github.base_ref }}
