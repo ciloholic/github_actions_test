@@ -6,22 +6,14 @@ permissions:
 on:
   workflow_dispatch:
     inputs:
-      branch:
-        required: true
-        description: ブランチ名
-        type: choice
-        default: main
-        options:
-          - main
-          - develop
       stage:
         required: true
         description: デプロイ先の環境名
         type: choice
         default: staging
         options:
-          - staging
           - production
+          - staging
 
 jobs:
   echo:
@@ -30,5 +22,5 @@ jobs:
 
     steps: 
       - run: |
-          echo '1' ${{ inputs.branch }}
+          echo '1' ${{ env.GITHUB_REF_NAME }}
           echo '2' ${{ inputs.stage }}
