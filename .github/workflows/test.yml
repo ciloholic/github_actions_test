@@ -22,6 +22,17 @@ jobs:
 
     steps: 
       - run: |
-          echo ${{ $env.GITHUB_REF_NAME }}
+          echo $GITHUB_REF_NAME
+          echo ${{ inputs.stage }}
+          if [ $GITHUB_REF_NAME = 'main' ] && [ ${{ inputs.stage }} = 'production' ]; then
+            echo 'OK(production)'
+          elif [ $GITHUB_REF_NAME = 'develop' ] && [ ${{ inputs.stage }} = 'staging' ]; then
+            echo 'OK(staging)'
+          else
+            echo NG
+            exit 1
+          fi
+
+      - run: |
           echo "$GITHUB_REF_NAME"
           echo ${{ inputs.stage }}
