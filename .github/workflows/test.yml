@@ -21,18 +21,26 @@ jobs:
     timeout-minutes: 5
 
     steps: 
-      - run: |
+      - name:
+        id: check
+        run: |
           echo $GITHUB_REF_NAME
           echo ${{ inputs.stage }}
           if [ $GITHUB_REF_NAME = 'main' ] && [ ${{ inputs.stage }} = 'production' ]; then
             echo 'OK(production)'
+            echo "STAGE=${{ inputs.stage }}" >> $GITHUB_ENV
+          elif [ $GITHUB_REF_NAME = 'main' ] && [ ${{ inputs.stage }} = 'preview' ]; then
+            echo 'OK(preview)'
+            echo "STAGE=${{ inputs.stage }}" >> $GITHUB_ENV
           elif [ $GITHUB_REF_NAME = 'develop' ] && [ ${{ inputs.stage }} = 'staging' ]; then
             echo 'OK(staging)'
+            echo "STAGE=${{ inputs.stage }}" >> $GITHUB_ENV
           else
             echo NG
             exit 1
           fi
 
-      - run: |
-          echo "$GITHUB_REF_NAME"
+      - name: print
+        run: |
           echo ${{ inputs.stage }}
+          echo ${{ env.STAGE }}
